@@ -1,0 +1,27 @@
+.feed-root {
+  width: 100%;
+  min-width: 1260px;
+  border: 1px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feed-container {
+  border: 1px solid red;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.feed-textarea {
+  margin: auto;
+  width: 70%;
+  background: white;
+  border-radius: 10px;
+  color: black;
+  opacity: 10;
+}

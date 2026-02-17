@@ -1,39 +1,12 @@
 "use client";
+
 import { useState } from "react";
+import Sidebar from "./_components/sidebar/SideBar";
+import StoryCard from "./_components/story-card/StoryCard";
+import "./page.css";
 
 const FILTER_TABS = ["Latest", "Top", "Rising", "Most Discussed"];
-const TRENDING = [
-  {
-    id: 1,
-    title: "Rotator cuff tear: 14 months of PT vs. surgery",
-    upvotes: 4210,
-    tag: "Shoulder",
-  },
-  {
-    id: 2,
-    title: "Uterine fibroids shrunk with castor oil packs",
-    upvotes: 3887,
-    tag: "Women's Health",
-  },
-  {
-    id: 3,
-    title: "Carpal tunnel resolved — no surgery in 2 years",
-    upvotes: 2654,
-    tag: "Nerve",
-  },
-  {
-    id: 4,
-    title: "How I reversed my cataract progression naturally",
-    upvotes: 1923,
-    tag: "Vision",
-  },
-  {
-    id: 5,
-    title: "Varicose veins: compression therapy success story",
-    upvotes: 1541,
-    tag: "Vascular",
-  },
-];
+
 const STORIES = [
   {
     id: 1,
@@ -158,7 +131,6 @@ export default function MainFeed() {
         .feed-wrapper {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 32px 24px 64px;
           display: grid;
           grid-template-columns: 1fr 320px;
           gap: 28px;
@@ -656,288 +628,41 @@ export default function MainFeed() {
       `}</style>
 
       <div className="feed-root">
-        <div className="feed-wrapper">
-          {/* Left: Feed */}
-          <div className="feed-col">
-            {/* Filter tabs */}
-            <div className="filter-bar">
-              {FILTER_TABS.map((tab) => (
-                <button
-                  key={tab}
-                  className={`filter-tab${activeTab === tab ? " active" : ""}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
+        <div className="feed-container">
+          <div>
+            <textarea
+              className="feed-textarea"
+              placeholder="Share your story or ask a question..."
+              rows={3}
+            />
+          </div>
+          <div className="feed-wrapper">
+            {/* Left: Feed */}
+            <div className="feed-col">
+              {/* Filter tabs */}
+              <div className="filter-bar">
+                {FILTER_TABS.map((tab) => (
+                  <button
+                    key={tab}
+                    className={`filter-tab${activeTab === tab ? " active" : ""}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+
+              {/* Story cards */}
+              {STORIES.map((story, i) => (
+                <StoryCard key={story.id} story={story} index={i} />
               ))}
             </div>
 
-            {/* Story cards */}
-            {STORIES.map((story, i) => (
-              <StoryCard key={story.id} story={story} index={i} />
-            ))}
+            {/* Right: Sidebar */}
+            <Sidebar />
           </div>
-
-          {/* Right: Sidebar */}
-          <Sidebar />
         </div>
       </div>
     </>
-  );
-}
-
-function StoryCard({ story, index }) {
-  const [votes, setVotes] = useState(story.upvotes);
-  const [userVote, setUserVote] = useState(null);
-
-  const handleVote = (dir) => {
-    if (userVote === dir) {
-      setVotes(story.upvotes);
-      setUserVote(null);
-    } else {
-      const delta = dir === "up" ? 1 : -1;
-      const prev = userVote === "up" ? 1 : userVote === "down" ? -1 : 0;
-      setVotes(story.upvotes + delta - prev);
-      setUserVote(dir);
-    }
-  };
-
-  return (
-    <article
-      className="story-card"
-      style={{ animationDelay: `${index * 0.08}s` }}
-    >
-      {/* Vote column */}
-      <div className="vote-col">
-        <VoteButton
-          count={votes}
-          direction="up"
-          active={userVote === "up"}
-          onClick={() => handleVote("up")}
-        />
-        <VoteButton
-          count={0}
-          direction="down"
-          active={userVote === "down"}
-          onClick={() => handleVote("down")}
-        />
-      </div>
-
-      {/* Card body */}
-      <div className="card-body">
-        {/* Top row: tags + badge */}
-        <div className="card-meta-top">
-          <div className="tag-row">
-            {story.tags.map((tag) => (
-              <span key={tag} className="tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-          {story.savedFromSurgery && (
-            <span className="surgery-badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Surgery avoided
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h2 className="card-title">
-          <a href={`/stories/${story.id}`}>{story.title}</a>
-        </h2>
-
-        {/* Excerpt */}
-        <p className="card-excerpt">{story.excerpt}</p>
-
-        {/* Remedy pill */}
-        <div className="remedy-row">
-          <span className="remedy-label">Remedy used:</span>
-          <span className="remedy-value">{story.remedy}</span>
-        </div>
-
-        {/* Footer */}
-        <div className="card-footer">
-          <div className="author-row">
-            <div className="avatar">{story.avatar}</div>
-            <span className="author-name">{story.author}</span>
-            <span className="dot-sep">·</span>
-            <span className="post-date">{story.date}</span>
-          </div>
-          <div className="card-actions">
-            <button className="action-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {story.comments} comments
-            </button>
-            <button className="action-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Share
-            </button>
-            <button className="action-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function Sidebar() {
-  return (
-    <aside className="sidebar">
-      {/* CTA Box */}
-      <div className="sidebar-cta">
-        <div className="cta-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 3C10.3 3 9 4.3 9 6V9H6C4.3 9 3 10.3 3 12C3 13.7 4.3 15 6 15H9V18C9 19.7 10.3 21 12 21C13.7 21 15 19.7 15 18V15H18C19.7 15 21 13.7 21 12C21 10.3 19.7 9 18 9H15V6C15 4.3 13.7 3 12 3Z"
-              fill="white"
-              fillOpacity="0.9"
-            />
-          </svg>
-        </div>
-        <h3 className="cta-title">Did a remedy save you from surgery?</h3>
-        <p className="cta-desc">
-          Your story could help thousands of people facing the same decision.
-        </p>
-        <a href="/share" className="cta-btn">
-          Share your story
-        </a>
-      </div>
-
-      {/* Trending */}
-      <div className="sidebar-card">
-        <div className="sidebar-card-header">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span>Trending this week</span>
-        </div>
-        <div className="trending-list">
-          {TRENDING.map((item, i) => (
-            <a
-              key={item.id}
-              href={`/stories/${item.id}`}
-              className="trending-item"
-            >
-              <span className="trending-rank">{i + 1}</span>
-              <div className="trending-body">
-                <span className="trending-title">{item.title}</span>
-                <div className="trending-meta">
-                  <span className="trending-tag">{item.tag}</span>
-                  <span className="trending-votes">
-                    ↑ {item.upvotes.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="sidebar-card stats-card">
-        <div className="sidebar-card-header">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span>Community stats</span>
-        </div>
-        <div className="stats-grid">
-          <div className="stat-item">
-            <span className="stat-value">14,820</span>
-            <span className="stat-label">Stories shared</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-value">9,340</span>
-            <span className="stat-label">Surgeries avoided</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-value">87k</span>
-            <span className="stat-label">Members</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-value">142</span>
-            <span className="stat-label">Conditions covered</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Disclaimer */}
-      <p className="disclaimer">
-        ⚕️ Stories shared here are personal experiences, not medical advice.
-        Always consult a qualified healthcare professional before changing your
-        treatment plan.
-      </p>
-    </aside>
-  );
-}
-
-function VoteButton({ count, direction, active, onClick }) {
-  return (
-    <button
-      className={`vote-btn ${direction} ${active ? "active" : ""}`}
-      onClick={onClick}
-      aria-label={direction === "up" ? "Upvote" : "Downvote"}
-    >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-        {direction === "up" ? (
-          <path d="M12 4L3 15h6v5h6v-5h6L12 4z" fill="currentColor" />
-        ) : (
-          <path d="M12 20l9-11h-6V4H9v5H3l9 11z" fill="currentColor" />
-        )}
-      </svg>
-      {direction === "up" && (
-        <span className="vote-count">
-          {count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count}
-        </span>
-      )}
-    </button>
   );
 }
