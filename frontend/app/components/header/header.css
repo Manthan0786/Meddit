@@ -1,3 +1,19 @@
+.header {
+  width: 100%;
+  padding: 20px 0;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: center;
+}
+
+.logo-navlinks-container {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -34,5 +50,5 @@
 
 .navlinks {
   display: flex;
-  gap: 20px;
+  gap: 40px;
 }

@@ -10,7 +10,7 @@ function Header() {
 
   return (
     <>
-      <header>
+      <header className="header">
         <div className="logo-navlinks-container">
           <a href="/" className="logo">
             <div className="logo-icon">
