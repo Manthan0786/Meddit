@@ -1,0 +1,13 @@
+.sign_in_btn {
+  padding: 10px 20px;
+  color: var(--warm-white);
+  background-color: var(--sage);
+  border-radius: 10px;
+}
+.sign_in_btn:hover {
+  background-color: var(--sage-dark);
+  cursor: pointer;
+}
+.sign_in_btn:active {
+  background-color: var(--sage-light);
+}

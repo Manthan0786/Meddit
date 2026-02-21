@@ -1,4 +1,5 @@
-import "./header.css";
+import SignIn from "../sign-in/SignIn";
+import styles from "./header.module.css";
 
 function Header() {
   const navLinks = [
@@ -10,10 +11,10 @@ function Header() {
 
   return (
     <>
-      <header className="header">
-        <div className="logo-navlinks-container">
-          <a href="/" className="logo">
-            <div className="logo-icon">
+      <header className={styles.header}>
+        <div className={styles.logo_navlinks_container}>
+          <a href="/" className={styles.logo}>
+            <div className={styles.logo_icon}>
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -31,14 +32,15 @@ function Header() {
                 />
               </svg>
             </div>
-            <div className="logo-text">Medify</div>
+            <div className={styles.logo_text}>Medify</div>
           </a>
-          <nav className="navlinks">
+          <nav className={styles.navlinks}>
             {navLinks.map((link) => (
-              <a key={link.href} href={link.href} className="navlink">
+              <a key={link.href} href={link.href} className={styles.navlink}>
                 {link.label}
               </a>
             ))}
+            <SignIn />
           </nav>
         </div>
       </header>

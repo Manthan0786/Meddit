@@ -29,6 +29,8 @@ func GetPosts(c *echo.Context) error {
 			Id:      r.ID,
 			Title:   r.Title,
 			Content: r.Content,
+			Remedy:  r.Remedy,
+			Date:    r.CreatedAt,
 			Tags:    tags,
 		}
 	}

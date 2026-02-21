@@ -1,0 +1,281 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   STORY CARD
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.story_card {
+  display: flex;
+  gap: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story_card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  border-color: rgba(74, 124, 89, 0.22);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   VOTE COLUMN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.vote_col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 10px 16px 14px;
+  gap: 4px;
+  background: rgba(250, 247, 242, 0.6);
+  border-right: 1px solid var(--border-light);
+  min-width: 56px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARD BODY
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card_body {
+  flex: 1;
+  padding: 16px 20px 14px;
+  min-width: 0;
+}
+
+.card_meta_top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.tag_row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--sage-dark);
+  background: var(--sage-pale);
+  border: 1px solid rgba(74, 124, 89, 0.15);
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.surgery_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #5a7a3a;
+  background: #eef5e6;
+  border: 1px solid #c5dda8;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+  margin-left: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARD TITLE
+   ══════════════════════════════════════════════════════════════════════════ */
+.card_title {
+  font-family: "Lora", serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.45;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.card_title a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.card_title a:hover {
+  color: var(--sage-dark);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARD EXCERPT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card_excerpt {
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REMEDY ROW
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.remedy_pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--earth-pale);
+  border: 1px solid rgba(139, 111, 71, 0.15);
+  border-radius: 7px;
+  padding: 5px 11px;
+  margin-bottom: 14px;
+}
+
+.remedy_label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--earth);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.remedy_value {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6b4f2a;
+  font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARD FOOTER
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.author_row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3px;
+}
+
+.author_name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.dot_sep {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.post_date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CARD ACTIONS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card_actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.action_btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s ease;
+}
+
+.action-btn:hover {
+  color: var(--sage-dark);
+  background: var(--sage-pale);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+  :global(.card-body) {
+    padding: 14px 14px 12px;
+  }
+
+  :global(.vote-col) {
+    min-width: 48px;
+    padding: 14px 8px 14px 10px;
+  }
+
+  :global(.card-title) {
+    font-size: 15px;
+  }
+
+  :global(.card-excerpt) {
+    display: none;
+  }
+
+  :global(.surgery-badge) {
+    display: none;
+  }
+
+  :global(.card-actions .action-btn:nth-child(3)) {
+    display: none;
+  }
+}

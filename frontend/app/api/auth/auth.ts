@@ -1,0 +1,27 @@
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [Google],
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.id_token = account.id_token;
+        const response = await fetch("http://localhost:1323/auth/google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_token: account.id_token,
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          token.backendJWT = data.token;
+        }
+      }
+      return token;
+    },
+  },
+});
