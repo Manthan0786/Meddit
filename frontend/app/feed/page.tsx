@@ -1,7 +1,9 @@
 import Sidebar from "./_components/sidebar/SideBar";
 import StoryCard from "./_components/story-card/StoryCard";
 import Tabs from "./_components/tabs/Tabs";
+import CreatePost from "./_components/create-post/CreatePost";
 import styles from "./feed.module.css";
+import { auth } from "../api/auth/auth";
 
 const FILTER_TABS = ["Latest", "Top", "Rising", "Most Discussed"];
 
@@ -87,33 +89,37 @@ const STORIES = [
   },
 ];
 
-export default function MainFeed() {
+export default async function MainFeed() {
+  const session = await auth();
+
+  const handleOpenPostModal = () => {
+    <>
+      <h1>Post Modal</h1>
+    </>;
+  };
+
+  if (!session) {
+    return <h1>Please sign in to proceed</h1>;
+  }
+
   return (
     <>
       <div className={styles.feed_root}>
         <div className={styles.feed_container}>
           <div>
-            <textarea
-              className={styles.feed_textarea}
-              placeholder="Share your story or ask a question..."
-              rows={3}
-            />
+            <CreatePost />
           </div>
           <div className={styles.feed_wrapper}>
-            {/* Left: Feed */}
             <div className="feed-col">
-              {/* Filter tabs */}
               <div className="filter-bar">
                 <Tabs />
               </div>
 
-              {/* Story cards */}
               {STORIES.map((story, i) => (
                 <StoryCard key={story.id} story={story} index={i} />
               ))}
             </div>
 
-            {/* Right: Sidebar */}
             <Sidebar />
           </div>
         </div>

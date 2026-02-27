@@ -12,6 +12,9 @@ import (
 func main() {
 	e := echo.New()
 	e.Use(middleware.RequestLogger())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:3000"},
+	}))
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -29,4 +32,3 @@ func main() {
 		e.Logger.Error("failed to start server", "error", err)
 	}
 }
-

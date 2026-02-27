@@ -1,13 +1,15 @@
-import SignIn from "../sign-in/SignIn";
+import { SignIn, SignOut } from "../sign-in/SignIn";
 import styles from "./header.module.css";
+import { auth } from "@/app/api/auth/auth";
 
-function Header() {
+async function Header() {
   const navLinks = [
     { label: "Stories", href: "/stories" },
     { label: "Remedies", href: "/remedies" },
     { label: "Conditions", href: "/conditions" },
     { label: "Community", href: "/community" },
   ];
+  const session = await auth();
 
   return (
     <>
@@ -40,7 +42,8 @@ function Header() {
                 {link.label}
               </a>
             ))}
-            <SignIn />
+
+            {session && session?.user ? <SignOut /> : <SignIn />}
           </nav>
         </div>
       </header>

@@ -1,5 +1,4 @@
 import VoteButton from "./VoteButton";
-import { getSession } from "../authcheck/AuthCheck";
 import styles from "./storycard.module.css";
 
 interface StoryCardProps {
@@ -20,13 +19,6 @@ interface StoryCardProps {
 }
 
 async function StoryCard({ story, index }: StoryCardProps) {
-  const session = await getSession();
-  console.log("Session in StoryCard:", session);
-
-  if (!session) {
-    return <h1>Not Allowed.</h1>;
-  }
-
   return (
     <article
       className={styles.story_card}

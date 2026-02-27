@@ -9,4 +9,5 @@ import (
 func RegisterRoutes(e *echo.Echo) {
 	e.POST("/auth/google", handler.GoogleAuth)
 	e.GET("/", handler.GetPosts)
+	e.POST("/post", handler.CreatePost)
 }

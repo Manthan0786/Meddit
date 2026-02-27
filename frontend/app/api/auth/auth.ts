@@ -17,11 +17,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }),
         });
         if (response.ok) {
-          const data = await response.json();
-          token.backendJWT = data.token;
+          const user = await response.json();
+          token.user = user;
         }
       }
       return token;
+    },
+    async session({ session, token }) {
+      session.user = token.user as any;
+      return session;
     },
   },
 });
