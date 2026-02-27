@@ -21,7 +21,11 @@ function CreatePost() {
 
   useEffect(() => {
     if (session && session?.user) {
-      setFormData((prev) => ({ ...prev, author: session.user.name }));
+      setFormData((prev) => ({
+        ...prev,
+        author: session.user.name,
+        avatar: session.user.image,
+      }));
     }
   }, []);
 
