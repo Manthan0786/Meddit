@@ -4,6 +4,7 @@ import Tabs from "./_components/tabs/Tabs";
 import CreatePost from "./_components/create-post/CreatePost";
 import styles from "./feed.module.css";
 import { auth } from "../api/auth/auth";
+import CreatePostController from "./_components/create-post/CreatePostController";
 
 const FILTER_TABS = ["Latest", "Top", "Rising", "Most Discussed"];
 
@@ -91,13 +92,6 @@ const STORIES = [
 
 export default async function MainFeed() {
   const session = await auth();
-
-  const handleOpenPostModal = () => {
-    <>
-      <h1>Post Modal</h1>
-    </>;
-  };
-
   if (!session) {
     return <h1>Please sign in to proceed</h1>;
   }
@@ -106,9 +100,7 @@ export default async function MainFeed() {
     <>
       <div className={styles.feed_root}>
         <div className={styles.feed_container}>
-          <div>
-            <CreatePost />
-          </div>
+          <CreatePostController />
           <div className={styles.feed_wrapper}>
             <div className="feed-col">
               <div className="filter-bar">

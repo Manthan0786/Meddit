@@ -5,7 +5,7 @@ import { PostPayload } from "@/app/_services/posts";
 import styles from "./createPost.module.css";
 import { useSession } from "next-auth/react";
 
-function CreatePost() {
+function CreatePost({ opened, onClose }) {
   const { data: session } = useSession();
 
   const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
@@ -20,26 +20,25 @@ function CreatePost() {
   });
 
   useEffect(() => {
+    console.log("Running effect");
     if (session && session?.user) {
       setFormData((prev) => ({
         ...prev,
         author: session.user.name,
-        avatar: session.user.image,
+        avatar: session.user.picture,
       }));
     }
   }, []);
 
-  const handleOpenPostModal = () => {
-    setOpenCreatePostModal(true);
-  };
-
   const handleClosePostModal = () => {
-    setOpenCreatePostModal(false);
+    onClose();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const payload = { ...formData };
+    console.log(payload);
+    return;
     try {
       const data = await PostPayload(payload);
       console.log(data);
@@ -84,15 +83,9 @@ function CreatePost() {
   return (
     <>
       {/* Trigger */}
-      <div
-        className={styles["create-post-trigger"]}
-        onClick={handleOpenPostModal}
-      >
-        Start a post...
-      </div>
 
       {/* Modal */}
-      {openCreatePostModal && (
+      {opened && (
         <div className={styles["modal-overlay"]} onClick={handleClosePostModal}>
           <div
             className={styles["modal-container"]}

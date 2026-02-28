@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { Endpoints, Gateway } from "./api";
 
 interface CreatePostPayload {
   title: string;
@@ -9,8 +9,8 @@ interface CreatePostPayload {
 
 export async function PostPayload(payload: CreatePostPayload) {
   try {
-    console.log(BASE_URL, "/post");
-    const res = await fetch(`${BASE_URL}/post`, {
+    console.log(Gateway, "/post");
+    const res = await fetch(`${Gateway}${Endpoints.FEED.POSTS}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

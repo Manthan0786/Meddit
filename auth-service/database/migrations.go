@@ -1,12 +1,12 @@
 package database
 
 import (
-	"backend/models"
+	"auth-service/models"
 	"log"
 )
 
 func RunMigrations() {
-	err := db.AutoMigrate(&models.Post{}, &models.Tag{})
+	err := db.AutoMigrate(&models.User{})
 	if err != nil {
 		log.Fatal("Failed to run migration", err)
 	}
