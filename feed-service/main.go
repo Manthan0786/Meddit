@@ -12,9 +12,8 @@ import (
 func main() {
 	e := echo.New()
 	e.Use(middleware.RequestLogger())
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000"},
-	}))
+	// CORS is handled by the gateway; do not add CORS here or the response
+	// would have two Access-Control-Allow-Origin headers.
 
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -28,7 +27,7 @@ func main() {
 
 	e.Logger.Info("Server successfully started")
 
-	if err := e.Start(":1323"); err != nil {
+	if err := e.Start(":8002"); err != nil {
 		e.Logger.Error("failed to start server", "error", err)
 	}
 }

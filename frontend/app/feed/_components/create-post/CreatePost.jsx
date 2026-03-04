@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { PostPayload } from "@/app/_services/posts";
 import styles from "./createPost.module.css";
 import { useSession } from "next-auth/react";
 
 function CreatePost({ opened, onClose }) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -19,30 +21,30 @@ function CreatePost({ opened, onClose }) {
     avatar: "",
   });
 
-  useEffect(() => {
-    console.log("Running effect");
-    if (session && session?.user) {
-      setFormData((prev) => ({
-        ...prev,
-        author: session.user.name,
-        avatar: session.user.picture,
-      }));
-    }
-  }, []);
-
   const handleClosePostModal = () => {
     onClose();
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const payload = { ...formData };
-    console.log(payload);
-    return;
+    const user = session?.user;
+    const payload = {
+      ...formData,
+      author: user?.name ?? "",
+      avatar: user?.picture ?? user?.image ?? "",
+    };
+    const token = session?.backendToken ?? user?.Token;
     try {
-      const data = await PostPayload(payload);
-      console.log(data);
-    } catch (error) {}
+      const data = await PostPayload(payload, token);
+      if (data?.error) {
+        console.error(data.error);
+        return;
+      }
+      onClose();
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Prevent background scroll
@@ -102,7 +104,10 @@ function CreatePost({ opened, onClose }) {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <label htmlFor="title">
+              <div className={styles["form-group"]}>
+                <label htmlFor="title" className={styles["form-label"]}>
+                  Title
+                </label>
                 <input
                   id="title"
                   name="title"
@@ -113,23 +118,28 @@ function CreatePost({ opened, onClose }) {
                   }
                   className={styles["title"]}
                 />
-              </label>
-              <textarea
-                className={styles["post-textarea"]}
-                placeholder="Share your journey..."
-                onChange={(event) =>
-                  handleInputChange("description", event.target.value)
-                }
-                value={formData.description}
-              />
-              <label htmlFor="remedy-input">
-                Remedies followed: {"\n"}
+              </div>
+              <div className={styles["form-group"]}>
+                <label className={styles["form-label"]}>Your story</label>
+                <textarea
+                  className={styles["post-textarea"]}
+                  placeholder="Share your journey..."
+                  onChange={(event) =>
+                    handleInputChange("description", event.target.value)
+                  }
+                  value={formData.description}
+                />
+              </div>
+              <div className={`${styles["form-group"]} ${styles["remedy-section"]}`}>
+                <label htmlFor="remedy-input" className={styles["form-label"]}>
+                  Remedies followed
+                </label>
                 <input
                   className={styles["remedy-input"]}
                   id="remedy-input"
                   type="text"
                   value={inputValue}
-                  placeholder="Type remedy and press Enter"
+                  placeholder="Type a remedy and press Enter"
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
@@ -141,14 +151,14 @@ function CreatePost({ opened, onClose }) {
                         type="button"
                         className={styles["remove-btn"]}
                         onClick={() => handleRemove(index)}
+                        aria-label={`Remove ${remedy}`}
                       >
                         ×
                       </button>
                     </span>
                   ))}
                 </div>
-              </label>
-
+              </div>
               <div className={styles["checkbox-container"]}>
                 <input
                   type="checkbox"
@@ -166,7 +176,7 @@ function CreatePost({ opened, onClose }) {
 
               <div className={styles["modal-footer"]}>
                 <button type="submit" className={styles["post-btn"]}>
-                  Post
+                  Publish post
                 </button>
               </div>
             </form>

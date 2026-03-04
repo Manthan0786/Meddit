@@ -5,7 +5,7 @@ export const Endpoints = {
     GOOGLE: "/auth/google",
   },
   FEED: {
-    POSTS: "/feed/posts",
-    CREATE_POST: "/feed/posts/create",
+    GET_POSTS: "/feed/posts",
+    CREATE_POST: "/feed/post",
   },
 };

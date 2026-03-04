@@ -7,7 +7,7 @@ import (
 )
 
 func RegisterRoutes(e *echo.Echo) {
-	api := e.Group("/api")
+	api := e.Group("/auth")
 
-	api.POST("/auth/google", handler.GoogleAuth)
+	api.POST("/google", handler.GoogleAuth)
 }

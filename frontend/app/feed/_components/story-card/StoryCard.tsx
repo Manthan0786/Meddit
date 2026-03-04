@@ -1,6 +1,11 @@
 import VoteButton from "./VoteButton";
 import styles from "./storycard.module.css";
 
+interface Author {
+  name: string;
+  avatar: string;
+}
+
 interface StoryCardProps {
   story: {
     id: number;
@@ -8,8 +13,7 @@ interface StoryCardProps {
     content: string;
     remedy: string;
     tags: string[];
-    avatar: string;
-    author: string;
+    author: Author;
     date: string;
     savedFromSurgery: boolean;
     upvotes: number;
@@ -25,23 +29,24 @@ async function StoryCard({ story, index }: StoryCardProps) {
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       {/* Vote column */}
-      <div className={styles.vote_col}>
+      {/* <div className={styles.vote_col}>
         <VoteButton storyId={story.id} initialVotes={story.votes} />
-      </div>
+      </div> */}
 
       {/* Card body */}
       <div className={styles.card_body}>
         {/* Top row: tags + badge */}
         <div className={styles.card_meta_top}>
           <div className={styles.tag_row}>
-            {story.tags.map((tag) => (
-              <span key={tag} className={styles.tag}>
-                {tag}
-              </span>
-            ))}
+            {story.tags &&
+              story.tags?.map((tag) => (
+                <span key={tag} className={styles.tag}>
+                  {tag}
+                </span>
+              ))}
           </div>
           {story.savedFromSurgery && (
-            <span className={styles.surgery_badge}>
+            <div className={styles.surgery_badge}>
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
@@ -52,7 +57,7 @@ async function StoryCard({ story, index }: StoryCardProps) {
                 />
               </svg>
               Surgery avoided
-            </span>
+            </div>
           )}
         </div>
 
@@ -73,10 +78,40 @@ async function StoryCard({ story, index }: StoryCardProps) {
         {/* Footer */}
         <div className={styles.card_footer}>
           <div className={styles.author_row}>
-            <div className={styles.avatar}>{story.avatar}</div>
-            <span className={styles.author_name}>{story.author}</span>
+            {story.author?.avatar ? (
+              <img
+                className={styles.avatar}
+                src={story.author.avatar}
+                alt={story.author?.name ?? "Author"}
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <div
+                className={styles.avatar}
+                style={{
+                  backgroundColor: "#6b7280",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                }}
+                aria-label={story.author?.name}
+              >
+                {story.author?.name
+                  ?.split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .slice(0, 2)
+                  .toUpperCase() ?? "?"}
+              </div>
+            )}
+            <span className={styles.author_name}>{story.author?.name}</span>
             <span className={styles.dot_sep}>·</span>
-            <span className={styles.post_date}>{story.date}</span>
+            <span className={styles.post_date}>
+              {new Date(story.date.toString()).toLocaleDateString()}
+            </span>
           </div>
           <div className={styles.card_actions}>
             <button className={styles.action_btn}>

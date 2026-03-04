@@ -59,20 +59,24 @@
   flex: 1;
   padding: 16px 20px 14px;
   min-width: 0;
+  position: relative;
 }
 
 .card_meta_top {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
   margin-bottom: 8px;
+  min-width: 0;
 }
 
 .tag_row {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .tag {
@@ -87,10 +91,16 @@
   text-transform: uppercase;
 }
 
+/* Scoped so module styles win over globals */
 .surgery_badge {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 11px;
   font-weight: 500;
   color: #5a7a3a;
@@ -99,7 +109,6 @@
   padding: 3px 9px;
   border-radius: 999px;
   letter-spacing: 0.2px;
-  margin-left: auto;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -189,17 +198,20 @@
 }
 
 .avatar {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
   color: white;
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+  object-fit: cover;
 }
 
 .author_name {
@@ -244,7 +256,7 @@
   transition: color 0.2s ease;
 }
 
-.action-btn:hover {
+.action_btn:hover {
   color: var(--sage-dark);
   background: var(--sage-pale);
 }

@@ -1,6 +1,7 @@
 import Sidebar from "./_components/sidebar/SideBar";
 import StoryCard from "./_components/story-card/StoryCard";
 import Tabs from "./_components/tabs/Tabs";
+import { getPosts } from "../_services/posts";
 import CreatePost from "./_components/create-post/CreatePost";
 import styles from "./feed.module.css";
 import { auth } from "../api/auth/auth";
@@ -95,19 +96,21 @@ export default async function MainFeed() {
   if (!session) {
     return <h1>Please sign in to proceed</h1>;
   }
+  const token = session?.user?.Token;
+  const stories = await getPosts(token ?? "");
 
   return (
     <>
       <div className={styles.feed_root}>
         <div className={styles.feed_container}>
-          <CreatePostController />
+          <div className={styles.compose_section}>
+            <CreatePostController />
+          </div>
           <div className={styles.feed_wrapper}>
-            <div className="feed-col">
-              <div className="filter-bar">
-                <Tabs />
-              </div>
+            <div className={styles.feed_col}>
+              <Tabs />
 
-              {STORIES.map((story, i) => (
+              {stories?.posts?.map((story: any, i: number) => (
                 <StoryCard key={story.id} story={story} index={i} />
               ))}
             </div>

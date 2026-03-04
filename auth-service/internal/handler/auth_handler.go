@@ -5,7 +5,6 @@ import (
 	apimodels "auth-service/api/models"
 	"auth-service/service"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -15,12 +14,12 @@ import (
 var validate = validator.New()
 
 func GoogleAuth(c *echo.Context) error {
-	fmt.Println("Request reached at GoogleAuth handler")
 	var reqBody apimodels.LoginWithGoogleRequest
 
 	if err := c.Bind(&reqBody); err != nil {
 		return c.JSON(http.StatusBadRequest, "invalid request")
 	}
+	c.Logger().Info("Request bound successfully", reqBody)
 
 	if err := validate.Struct(reqBody); err != nil {
 		var validationErrors validator.ValidationErrors
@@ -33,16 +32,22 @@ func GoogleAuth(c *echo.Context) error {
 			"error": "invalid request",
 		})
 	}
+	c.Logger().Info("Validation passed successfully")
 
 	user, err := service.LoginWithGoogle(c, reqBody)
 	if err != nil {
 		return c.JSON(http.StatusUnauthorized, err.Error())
 	}
 
+	c.Logger().Info("User logged in successfully", user)
+
 	token, err := service.GenerateJWT(user)
 	if err != nil {
+		c.Logger().Error("failed to generate token", "error", err)
 		return c.JSON(http.StatusInternalServerError, "failed to generate token")
 	}
+
+	c.Logger().Info("JWT generated successfully")
 
 	resBody := apimodels.UserResponse{
 		Id:      int(user.ID),
