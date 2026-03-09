@@ -6,17 +6,39 @@ import { PostPayload } from "@/app/_services/posts";
 import styles from "./createPost.module.css";
 import { useSession } from "next-auth/react";
 
+interface CreatePostProps {
+  opened: boolean;
+  onClose: () => void;
+}
+
+interface CreatePostFormData {
+  title: string;
+  description: string;
+  savedFromSurgery: boolean;
+  remedy: string[];
+  author: string;
+  avatar: string;
+}
+
+interface CreatePostProps {
+  opened: boolean;
+  onClose: () => void;
+}
 interface CreatePostError {
   title: string;
   description: string;
 }
 
-function CreatePost({ opened, onClose }) {
+function CreatePost({ opened, onClose }: CreatePostProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
   const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [errors, setErrors] = useState({
+    title: "",
+    description: "",
+  });
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -30,8 +52,24 @@ function CreatePost({ opened, onClose }) {
     onClose();
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const newErrors = {
+      title: "",
+      description: "",
+    };
+    if (!formData.title.trim()) {
+      newErrors.title = "Title is required";
+    }
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required";
+    }
+    if (newErrors.title || newErrors.description) {
+      setErrors(newErrors);
+      return;
+    }
+
     const user = session?.user;
     const payload = {
       ...formData,
@@ -40,7 +78,7 @@ function CreatePost({ opened, onClose }) {
     };
     const token = session?.backendToken ?? user?.Token;
     try {
-      const data = await PostPayload(payload, token);
+      const data = await PostPayload(payload, token ?? "");
       if (data?.error) {
         console.error(data.error);
         return;
@@ -65,14 +103,15 @@ function CreatePost({ opened, onClose }) {
     };
   }, [openCreatePostModal]);
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim() !== "") {
       e.preventDefault();
-      setFormData((prev) => ({
+      setFormData((prev: CreatePostFormData) => ({
         ...prev,
         remedy: [...prev.remedy, inputValue.trim()],
       }));
@@ -108,7 +147,13 @@ function CreatePost({ opened, onClose }) {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form
+              onSubmit={(event) =>
+                handleSubmit(
+                  event as unknown as React.MouseEvent<HTMLFormElement>,
+                )
+              }
+            >
               <div className={styles["form-group"]}>
                 <label htmlFor="title" className={styles["form-label"]}>
                   Title
@@ -123,6 +168,17 @@ function CreatePost({ opened, onClose }) {
                   }
                   className={styles["title"]}
                 />
+                {errors.title && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "0.8rem",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.title}
+                  </p>
+                )}
               </div>
               <div className={styles["form-group"]}>
                 <label className={styles["form-label"]}>Your story</label>
@@ -134,8 +190,21 @@ function CreatePost({ opened, onClose }) {
                   }
                   value={formData.description}
                 />
+                {errors.description && (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "0.8rem",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {errors.description}
+                  </p>
+                )}
               </div>
-              <div className={`${styles["form-group"]} ${styles["remedy-section"]}`}>
+              <div
+                className={`${styles["form-group"]} ${styles["remedy-section"]}`}
+              >
                 <label htmlFor="remedy-input" className={styles["form-label"]}>
                   Remedies followed
                 </label>

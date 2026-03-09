@@ -9,10 +9,18 @@ import (
 	"github.com/labstack/echo/v5"
 )
 
-func GetPosts(c *echo.Context) error {
-	posts, err := service.GetAllPosts()
+type PostHandler struct {
+	postService service.PostService
+}
+
+func NewPostHandler(postService service.PostService) *PostHandler {
+	return &PostHandler{postService: postService}
+}
+
+func (h *PostHandler) GetPosts(c *echo.Context) error {
+	posts, err := h.postService.GetAllPosts()
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	resp := apimodels.PostsResponse{Posts: make([]apimodels.GetPostsResponse, len(posts))}
 	for i, r := range posts {

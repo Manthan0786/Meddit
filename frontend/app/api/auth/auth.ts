@@ -8,7 +8,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, account }) {
       if (account) {
         token.id_token = account.id_token;
-        const response = await fetch("http://localhost:8000/auth/google", {
+        const response = await fetch(`${Gateway}/auth/google`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

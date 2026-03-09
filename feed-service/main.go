@@ -4,10 +4,16 @@ import (
 	"backend/config"
 	"backend/database"
 	"backend/internal/api"
+	"backend/internal/handler"
+	"backend/service"
 
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 )
+
+type Server struct {
+	postHandler handler.PostHandler
+}
 
 func main() {
 	e := echo.New()
@@ -22,11 +28,20 @@ func main() {
 	}
 
 	database.InitDB(cfg)
+	db := database.GetDB()
+	if db == nil {
+		e.Logger.Error("failed to get database")
+		return
+	}
+
 	database.RunMigrations()
-	api.RegisterRoutes(e)
+
+	postService := service.NewPostService(db)
+	postHandler := handler.NewPostHandler(*postService)
+	server := api.NewServer(postHandler)
+	server.RegisterRoutes(e)
 
 	e.Logger.Info("Server successfully started")
-
 	if err := e.Start(":8002"); err != nil {
 		e.Logger.Error("failed to start server", "error", err)
 	}

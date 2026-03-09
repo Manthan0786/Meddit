@@ -40,7 +40,6 @@ export async function getPosts(backendToken: string) {
       },
     });
     const data = await response.json();
-    console.log("This is the data", data);
     return data;
   } catch (error) {
     console.error(error);

@@ -1,4 +1,14 @@
 services:
+  gateway:
+    build:
+      context: ./meddit-gateway
+      no_cache: true
+    container_name: meddit-gateway
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
   db:
     image: postgres
     environment:

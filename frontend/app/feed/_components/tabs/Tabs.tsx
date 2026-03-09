@@ -1,25 +1,30 @@
 "use client";
 
 import { useState } from "react";
+import styles from "./tabs.module.css";
+
+const FILTER_TABS = ["Latest", "Top", "Rising", "Most Discussed"];
 
 function Tabs() {
   const [activeTab, setActiveTab] = useState("Latest");
-  const FILTER_TABS = ["Latest", "Top", "Rising", "Most Discussed"];
+
   return (
-    <>
-      <div className="tabs-wrapper">
-        {FILTER_TABS.map((tab) => (
-          <button
-            key={tab}
-            className={`filter-tab${activeTab === tab ? " active" : ""}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-    </>
+    <div className={styles.tabsWrapper}>
+      {FILTER_TABS.map((tab) => (
+        <button
+          key={tab}
+          type="button"
+          className={`${styles.filterTab}${
+            activeTab === tab ? " " + styles.filterTabActive : ""
+          }`}
+          onClick={() => setActiveTab(tab)}
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
   );
 }
 
 export default Tabs;
+
