@@ -4,7 +4,7 @@ import { auth } from "@/app/api/auth/auth";
 
 async function Header() {
   const navLinks = [
-    { label: "Stories", href: "/stories" },
+    { label: "Stories", href: "/feed" },
     { label: "Remedies", href: "/remedies" },
     { label: "Conditions", href: "/conditions" },
     { label: "Community", href: "/community" },

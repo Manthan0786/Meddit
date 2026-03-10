@@ -45,7 +45,38 @@ body {
 }
 
 body {
-  background-color: var(--cream);
+  background-color: var(--app-background);
   color: var(--text-primary);
   font-family: "DM Sans", Arial, Helvetica, sans-serif;
+}
+
+.layout_wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout_main {
+  flex: 1;
+}
+
+/* =========================
+   FOOTER (after Tailwind so these rules win)
+   ========================= */
+.app_footer {
+  width: 100%;
+  margin-top: auto;
+  background-color: var(--sage-dark);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app_footer_container {
+  width: 80%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: #fff;
 }
