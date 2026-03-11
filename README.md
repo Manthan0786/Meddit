@@ -102,7 +102,7 @@ Use **one** PostgreSQL database. Both auth-service and feed-service point to the
 
 ### 3. Environment
 
-Create a `.env` file at the **project root** (parent of `frontend/`, `meddit-gateway/`, `auth-service/`, `feed-service/`).
+Create a `.env` file at the **project root** (parent of `frontend/`, `meddit-gateway/`, `auth-service/`, `feed-service/`). **Do not commit this file**—use it only locally and add real values yourself.
 
 **Database & gateway** (same `DB_*` and `DB_NAME` for both auth and feed services):
 
@@ -110,10 +110,10 @@ Create a `.env` file at the **project root** (parent of `frontend/`, `meddit-gat
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
-DB_PASSWORD=your_password
+DB_PASSWORD=<your-db-password>
 DB_NAME=meddit
 
-JWT_SECRET=your_jwt_secret_min_32_chars
+JWT_SECRET=<at-least-32-character-secret>
 ```
 
 **Frontend** (NextAuth + Google):
@@ -124,8 +124,8 @@ JWT_SECRET=your_jwt_secret_min_32_chars
 Then in `.env` at project root (or in `frontend/.env.local` if you prefer), add:
 
 ```env
-AUTH_GOOGLE_ID=your_google_client_id
-AUTH_GOOGLE_SECRET=your_google_client_secret
+AUTH_GOOGLE_ID=<your-google-client-id>
+AUTH_GOOGLE_SECRET=<your-google-client-secret>
 ```
 
 Optional: if the frontend runs against a different gateway URL:
@@ -182,7 +182,7 @@ docker compose up -d
 
 This will:
 
-- **`db`** — Start a PostgreSQL container (official `postgres` image). Uses `DB_USER`, `DB_PASSWORD`, and `DB_NAME` from `.env`. Port `5432` is published. Both auth-service and feed-service use this **same database**; you can inspect tables with pgAdmin or any PostgreSQL client.
+- **`db`** — Start a PostgreSQL container (official `postgres` image). Uses `DB_USER`, `DB_PASSWORD`, and `DB_NAME` from `.env`. Port `5432` is published. Both auth-service and feed-service use this database; you can inspect tables with pgAdmin or any PostgreSQL client.
 - **`gateway`** — Build the image from `meddit-gateway/Dockerfile` (multi-stage Go build) and run the API gateway. It loads `.env` and exposes port `8000`.
 
 Useful commands:

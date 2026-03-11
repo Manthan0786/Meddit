@@ -5,6 +5,7 @@ backend/.env
 frontend/.env.local
 
 # Common
+.env
 node_modules/
 .DS_Store
 docs/
