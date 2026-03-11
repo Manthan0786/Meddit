@@ -58,7 +58,7 @@ func (h *PostHandler) GetPosts(c *echo.Context) error {
 	return c.JSON(http.StatusOK, resp)
 }
 
-func CreatePost(c *echo.Context) error {
+func (h *PostHandler) CreatePost(c *echo.Context) error {
 	var req apimodels.CreatePostRequest
 	ctx := c.Request().Context()
 	err := c.Bind(&req)
@@ -79,7 +79,7 @@ func CreatePost(c *echo.Context) error {
 		return c.String(http.StatusBadRequest, "missing author (X-User-ID)")
 	}
 
-	obj, err := service.CreatePost(ctx, req, authorID)
+	obj, err := h.postService.CreatePost(ctx, req, authorID)
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Something went wrong")
 	}

@@ -11,8 +11,8 @@ export default async function MainFeed() {
   if (!session) {
     return <h1>Please sign in to proceed</h1>;
   }
-  const token = session?.user?.Token;
-  const stories = await getPosts(token ?? "");
+  const token = session?.user?.Token ?? "";
+  const stories = await getPosts(token);
 
   return (
     <>
@@ -26,8 +26,13 @@ export default async function MainFeed() {
               <Tabs />
 
               {stories?.posts?.length > 0 ? (
-                stories?.posts?.map((story: any, i: number) => (
-                  <StoryCard key={story.id} story={story} index={i} />
+                stories.posts.map((story: any, i: number) => (
+                  <StoryCard
+                    key={story.id}
+                    story={story}
+                    index={i}
+                    backendToken={token}
+                  />
                 ))
               ) : (
                 <h1>No stories found</h1>

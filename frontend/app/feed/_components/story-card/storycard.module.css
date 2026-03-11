@@ -51,6 +51,66 @@
   min-width: 56px;
 }
 
+.vote_widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+}
+
+.vote_button {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.05s ease;
+}
+
+.vote_button:hover {
+  background: rgba(74, 124, 89, 0.08);
+  color: var(--sage-dark);
+}
+
+.vote_button_active_up {
+  background: var(--sage-pale);
+  color: var(--sage-dark);
+}
+
+.vote_button_active_down {
+  background: rgba(203, 68, 53, 0.08);
+  color: #cb4435;
+}
+
+.vote_count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.vote_spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(148, 163, 184, 0.4);
+  border-top-color: var(--sage-dark);
+  animation: vote-spin 0.6s linear infinite;
+}
+
+@keyframes vote-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ══════════════════════════════════════════════════════════════════════════
    CARD BODY
    ══════════════════════════════════════════════════════════════════════════ */

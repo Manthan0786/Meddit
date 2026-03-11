@@ -20,18 +20,23 @@ interface StoryCardProps {
     comments: number;
   };
   index: number;
+  backendToken: string;
 }
 
-async function StoryCard({ story, index }: StoryCardProps) {
+async function StoryCard({ story, index, backendToken }: StoryCardProps) {
   return (
     <article
       className={styles.story_card}
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       {/* Vote column */}
-      {/* <div className={styles.vote_col}>
-        <VoteButton storyId={story.id} initialVotes={story.votes} />
-      </div> */}
+      <div className={styles.vote_col}>
+        <VoteButton
+          storyId={story.id}
+          initialVotes={story.upvotes ?? 0}
+          backendToken={backendToken}
+        />
+      </div>
 
       {/* Card body */}
       <div className={styles.card_body}>

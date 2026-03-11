@@ -7,5 +7,6 @@ export const Endpoints = {
   FEED: {
     GET_POSTS: "/feed/posts",
     CREATE_POST: "/feed/post",
+    VOTE: "/feed/vote",
   },
 };

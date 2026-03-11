@@ -1,43 +1,81 @@
 "use client";
 
 import { useState } from "react";
+import { voteOnPost } from "../../../_services/posts";
 
 type Props = {
-  storyId: Number;
-  initialVotes: Number;
+  storyId: number;
+  initialVotes: number;
+  backendToken: string;
 };
 
-type VoteDirection = "up" | "down" | null;
+type VoteDirection = "up" | "down";
 
-export default function VoteButton({ storyId, initialVotes }: Props) {
-  const [votes, setVotes] = useState(initialVotes);
-  const [userVote, setUserVote] = useState(null);
+import styles from "./storycard.module.css";
 
-  //   async function handleVote() {
-  //     setVotes((v) => v + 1);
+export default function VoteButton({
+  storyId,
+  initialVotes,
+  backendToken,
+}: Props) {
+  const [votes, setVotes] = useState<number>(initialVotes);
+  const [userVote, setUserVote] = useState<VoteDirection | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  //     await fetch("/api/vote", {
-  //       method: "POST",
-  //       body: JSON.stringify({ storyId }),
-  //     });
-  //   }
+  const handleVote = async (dir: VoteDirection) => {
+    if (isLoading) return;
 
-  //   const handleVote = (dir: VoteDirection) => {
-  //     if (userVote === dir) {
-  //       setVotes(story.upvotes);
-  //       setUserVote(null);
-  //     } else {
-  //       const delta = dir === "up" ? 1 : -1;
-  //       const prev = userVote === "up" ? 1 : userVote === "down" ? -1 : 0;
-  //       setVotes(story.upvotes + delta - prev);
-  //       setUserVote(dir);
-  //     }
-  //   };
+    if (userVote === dir) {
+      // For pessimistic updates, do nothing on second click until backed by API decision.
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const data = await voteOnPost(storyId, dir, backendToken);
+      if (typeof data?.votes === "number") {
+        setVotes(data.votes);
+        setUserVote(dir);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update vote. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <>
-      <button>👍 {votes}</button>
-      <button>👎</button>
-    </>
+    <div className={styles.vote_widget} aria-label="Vote on story">
+      <button
+        type="button"
+        className={`${styles.vote_button} ${
+          userVote === "up" ? styles.vote_button_active_up : ""
+        }`}
+        onClick={() => handleVote("up")}
+        disabled={isLoading}
+        aria-pressed={userVote === "up"}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5l7 7H5l7-7z" fill="currentColor" />
+        </svg>
+      </button>
+      <div className={styles.vote_count}>
+        {isLoading ? <span className={styles.vote_spinner} /> : votes}
+      </div>
+      <button
+        type="button"
+        className={`${styles.vote_button} ${
+          userVote === "down" ? styles.vote_button_active_down : ""
+        }`}
+        onClick={() => handleVote("down")}
+        disabled={isLoading}
+        aria-pressed={userVote === "down"}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 19l-7-7h14l-7 7z" fill="currentColor" />
+        </svg>
+      </button>
+    </div>
   );
 }

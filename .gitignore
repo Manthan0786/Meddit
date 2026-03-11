@@ -7,3 +7,5 @@ frontend/.env.local
 # Common
 node_modules/
 .DS_Store
+docs/
+.cursor/

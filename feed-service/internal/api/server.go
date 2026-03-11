@@ -7,11 +7,15 @@ import (
 )
 
 type Server struct {
-	postHandler handler.PostHandler
+	postHandler *handler.PostHandler
+	voteHandler *handler.VoteHandler
 }
 
-func NewServer(postHandler *handler.PostHandler) *Server {
-	return &Server{postHandler: *postHandler}
+func NewServer(postHandler *handler.PostHandler, voteHandler *handler.VoteHandler) *Server {
+	return &Server{
+		postHandler: postHandler,
+		voteHandler: voteHandler,
+	}
 }
 
 func (s *Server) RegisterRoutes(e *echo.Echo) {
@@ -19,12 +23,18 @@ func (s *Server) RegisterRoutes(e *echo.Echo) {
 	// Routes under /feed match what the gateway forwards (Gateway receives /feed/* and proxies path as-is)
 	feed := e.Group("/feed")
 	feed.GET("/posts", s.GetPosts)
-	feed.POST("/post", handler.CreatePost)
+	feed.POST("/post", s.CreatePost)
+	feed.POST("/vote", s.VotePost)
 }
+
 func (s *Server) GetPosts(c *echo.Context) error {
 	return s.postHandler.GetPosts(c)
 }
 
-func CreatePost(c *echo.Context) error {
-	return handler.CreatePost(c)
+func (s *Server) CreatePost(c *echo.Context) error {
+	return s.postHandler.CreatePost(c)
+}
+
+func (s *Server) VotePost(c *echo.Context) error {
+	return s.voteHandler.VotePost(c)
 }

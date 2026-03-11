@@ -35,10 +35,13 @@ func main() {
 	}
 
 	database.RunMigrations()
+	database.SeedDemoPosts()
 
 	postService := service.NewPostService(db)
 	postHandler := handler.NewPostHandler(*postService)
-	server := api.NewServer(postHandler)
+	voteService := service.NewVoteService(db)
+	voteHandler := handler.NewVoteHandler(*voteService)
+	server := api.NewServer(postHandler, voteHandler)
 	server.RegisterRoutes(e)
 
 	e.Logger.Info("Server successfully started")
