@@ -72,5 +72,5 @@ export async function voteOnPost(
   }
 
   const data = await response.json();
-  return data as { votes: number };
+  return data as { votes: number; totalVotes: number };
 }

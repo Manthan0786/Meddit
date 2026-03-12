@@ -50,5 +50,23 @@
 
 .navlinks {
   display: flex;
+  align-items: center;
   gap: 40px;
+}
+
+.navlink {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+.navlink:hover {
+  color: var(--sage-dark);
+}
+
+.navlink_active {
+  font-weight: 600;
+  color: var(--sage-dark);
 }

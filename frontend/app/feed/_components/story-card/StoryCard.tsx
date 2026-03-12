@@ -16,7 +16,8 @@ interface StoryCardProps {
     author: Author;
     date: string;
     savedFromSurgery: boolean;
-    upvotes: number;
+    votes?: number;
+    upvotes?: number;
     comments: number;
   };
   index: number;
@@ -33,7 +34,7 @@ async function StoryCard({ story, index, backendToken }: StoryCardProps) {
       <div className={styles.vote_col}>
         <VoteButton
           storyId={story.id}
-          initialVotes={story.upvotes ?? 0}
+          initialVotes={story.votes ?? story.upvotes ?? 0}
           backendToken={backendToken}
         />
       </div>

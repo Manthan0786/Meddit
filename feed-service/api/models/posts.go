@@ -17,6 +17,7 @@ type GetPostsResponse struct {
 	SavedFromSurgery bool           `json:"savedFromSurgery"`
 	Tags             []TagResponse  `json:"tags"`
 	Author           AuthorResponse `json:"author"`
+	Votes            int            `json:"votes"`
 }
 
 type PostResponse struct {

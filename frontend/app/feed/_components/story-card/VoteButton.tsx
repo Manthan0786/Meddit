@@ -33,8 +33,8 @@ export default function VoteButton({
     try {
       setIsLoading(true);
       const data = await voteOnPost(storyId, dir, backendToken);
-      if (typeof data?.votes === "number") {
-        setVotes(data.votes);
+      if (typeof data?.totalVotes === "number") {
+        setVotes(data.totalVotes);
         setUserVote(dir);
       }
     } catch (err) {

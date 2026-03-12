@@ -23,6 +23,26 @@ func (s *PostService) GetAllPosts() ([]models.Post, error) {
 	return posts, err
 }
 
+// GetVoteTotalsByPostIDs returns a map of post ID -> total vote count (sum of all users' votes for that post).
+func (s *PostService) GetVoteTotalsByPostIDs(postIDs []uint) (map[uint]int, error) {
+	if len(postIDs) == 0 {
+		return map[uint]int{}, nil
+	}
+	var results []struct {
+		PostID uint
+		Total  int64
+	}
+	err := s.db.Model(&models.Vote{}).Select("post_id, SUM(votes) as total").Where("post_id IN ?", postIDs).Group("post_id").Scan(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	out := make(map[uint]int, len(results))
+	for _, r := range results {
+		out[r.PostID] = int(r.Total)
+	}
+	return out, nil
+}
+
 func (s *PostService) CreatePost(ctx context.Context, req apimodels.CreatePostRequest, authorID uint) (*models.Post, error) {
 	post := models.Post{
 		Title:            req.Title,

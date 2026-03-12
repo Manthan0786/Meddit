@@ -22,6 +22,14 @@ func (h *PostHandler) GetPosts(c *echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
+	postIDs := make([]uint, len(posts))
+	for i, p := range posts {
+		postIDs[i] = p.Id
+	}
+	voteTotals, err := h.postService.GetVoteTotalsByPostIDs(postIDs)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
 	resp := apimodels.PostsResponse{Posts: make([]apimodels.GetPostsResponse, len(posts))}
 	for i, r := range posts {
 		var tags []apimodels.TagResponse
@@ -53,6 +61,7 @@ func (h *PostHandler) GetPosts(c *echo.Context) error {
 			Tags:             tags,
 			Date:             r.CreatedAt,
 			Author:           author,
+			Votes:            voteTotals[r.Id],
 		}
 	}
 	return c.JSON(http.StatusOK, resp)
