@@ -18,12 +18,12 @@ Meddit is a Reddit-inspired space focused on **natural remedies and holistic app
 
 ## Tech Stack
 
-| Layer        | Technology |
-|-------------|------------|
-| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS 4, NextAuth (Google) |
-| **API Gateway** | Go (Echo), JWT auth middleware, reverse proxy |
-| **Auth Service** | Go (Echo), PostgreSQL, GORM, JWT, Google OAuth |
-| **Feed Service** | Go (Echo), PostgreSQL, GORM — posts, tags, votes |
+| Layer            | Technology                                                          |
+| ---------------- | ------------------------------------------------------------------- |
+| **Frontend**     | Next.js 16, React 19, TypeScript, Tailwind CSS 4, NextAuth (Google) |
+| **API Gateway**  | Go (Echo), JWT auth middleware, reverse proxy                       |
+| **Auth Service** | Go (Echo), PostgreSQL, GORM, JWT, Google OAuth                      |
+| **Feed Service** | Go (Echo), PostgreSQL, GORM — posts, tags, votes                    |
 
 ---
 
@@ -44,7 +44,7 @@ Meddit is a Reddit-inspired space focused on **natural remedies and holistic app
                     └────────┬────────┘
                              │
               ┌──────────────┼──────────┐
-              ▼                         ▼  
+              ▼                         ▼
      ┌──────────────┐            ┌──────────────┐
      │ Auth Service │            │ Feed Service │
      │ (Echo) :8001 │            │ (Echo) :8002 │
@@ -107,13 +107,7 @@ Create a `.env` file at the **project root** (parent of `frontend/`, `meddit-gat
 **Database & gateway** (same `DB_*` and `DB_NAME` for both auth and feed services):
 
 ```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=<your-db-password>
-DB_NAME=meddit
-
-JWT_SECRET=<at-least-32-character-secret>
+SECRETS FOR DB AND OTHER
 ```
 
 **Frontend** (NextAuth + Google):
@@ -163,10 +157,10 @@ cd meddit-gateway && go run main.go
 cd frontend && npm install && npm run dev
 ```
 
-- **App:** [http://localhost:3000](http://localhost:3000)  
-- **Gateway:** [http://localhost:8000](http://localhost:8000)  
-- **Auth API:** [http://localhost:8001](http://localhost:8001)  
-- **Feed API:** [http://localhost:8002](http://localhost:8002)  
+- **App:** [http://localhost:3000](http://localhost:3000)
+- **Gateway:** [http://localhost:8000](http://localhost:8000)
+- **Auth API:** [http://localhost:8001](http://localhost:8001)
+- **Feed API:** [http://localhost:8002](http://localhost:8002)
 
 Sign in with Google, then open the feed to create posts and vote.
 
@@ -213,4 +207,4 @@ MIT (or your preferred license).
 
 ---
 
-*Meddit — Who knows what might work for you?*
+_Meddit — Who knows what might work for you?_
